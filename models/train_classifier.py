@@ -1,5 +1,6 @@
 import sys
 import pickle 
+from sklearn.externals import joblib
 
 import nltk
 nltk.download(['punkt', 'wordnet', 'stopwords', 'averaged_perceptron_tagger', 'maxent_ne_chunker', 'words'])
@@ -67,7 +68,6 @@ def tokenize(text):
                            
     return tokens
 
-
 # create a Named Entity Extractor, return True if a Named Entity is recognized, False otherwise
 class NamedEntityExtractor(BaseEstimator, TransformerMixin):
     '''Custom transformer to recognize named entity in text data
@@ -102,8 +102,8 @@ class NamedEntityExtractor(BaseEstimator, TransformerMixin):
             dataframe that contains the transformed data.
         '''
         X_NNP = pd.Series(X).apply(self.named_entity)
-        return pd.DataFrame(X_NNP)                           
-                           
+        return pd.DataFrame(X_NNP)
+    
 def build_model():
     '''Function to build machine learning model by creating a pipeline.
     Args:
@@ -154,16 +154,16 @@ def save_model(model, model_filepath):
     Returns:
         None
     '''
-    with open(model_filepath, 'wb') as file:
-        pickle.dump(model, file)
-    file.close()
+    joblib.dump(model, model_filepath)
 
 def main():
+    
     if len(sys.argv) == 3:
         database_filepath, model_filepath = sys.argv[1:]
         print('Loading data...\n    DATABASE: {}'.format(database_filepath))
         X, Y, category_names = load_data(database_filepath)
         X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2)
+        
         
         print('Building model...')
         model = build_model()
@@ -187,4 +187,5 @@ def main():
 
 
 if __name__ == '__main__':
+    #named_entity = NamedEntityExtractor()
     main()
