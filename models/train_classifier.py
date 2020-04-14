@@ -1,5 +1,4 @@
 import sys
-import pickle 
 from sklearn.externals import joblib
 
 import nltk
@@ -15,7 +14,7 @@ from nltk import pos_tag, ne_chunk
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from sklearn.pipeline import Pipeline, FeatureUnion
 from sklearn.base import BaseEstimator, TransformerMixin
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.multioutput import MultiOutputClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report
@@ -105,11 +104,12 @@ class NamedEntityExtractor(BaseEstimator, TransformerMixin):
         return pd.DataFrame(X_NNP)
     
 def build_model():
-    '''Function to build machine learning model by creating a pipeline.
+    '''Function to build machine learning model by creating a pipeline,
+    and by using GridSearchCV to find best parameters.
     Args:
         None
     Returns:
-        pipeline: machine learning pipeline that contains text process steps and classifier.
+        model: machine learning pipeline that contains text process steps, classifier and GridSearchCV step.
     '''
     # create pipeline
     pipeline = Pipeline([
@@ -123,9 +123,14 @@ def build_model():
         ('named_entity', NamedEntityExtractor())
     ])),
 
-    ('clf', RandomForestClassifier())
+    ('clf', MultiOutputClassifier(RandomForestClassifier()))
 ])
-    return pipeline
+    # tune parameters
+    parameters = {'features__text_pipeline__tfidf__norm': ['l1', 'l2'],
+                    'clf__estimator__bootstrap': [True, False]}
+
+    model = GridSearchCV(pipeline, param_grid=parameters, cv=2, n_jobs=-1)
+    return model
                            
 def evaluate_model(model, X_test, Y_test, category_names):
     '''Function to predict and print out f1 score, precision and recall of the classification model.
@@ -187,5 +192,4 @@ def main():
 
 
 if __name__ == '__main__':
-    #named_entity = NamedEntityExtractor()
     main()
