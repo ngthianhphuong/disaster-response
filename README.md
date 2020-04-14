@@ -5,16 +5,16 @@ ETL, Machine Learning Pipelines and Flask Web App to classify 20000+ disaster me
 ## Installation
 
 This project requires Python and libraries used in data science, ETL and natural language processing such as:
-    - pandas
-    - sqlalchemy
-    - nltk
-    - scikit-learn
+- pandas
+- sqlalchemy
+- nltk
+- scikit-learn
 
 To easily check the code at the same time as the output, it is recommended to install Anaconda and Jupyter Notebook.
 
 For Web App, the following libraries are required:
-	- Flask
-	- Plotly
+- Flask
+- Plotly
 
 ## Dataset Description
 
