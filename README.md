@@ -62,7 +62,8 @@ Two Jupyter notebooks that were used to create ETL Pipeline and Machine Learning
 ## Result Summary
 Classification model using Random Forest has average accuracy (f1 score) at 85% over 36 categories. Lowest score is 76%, highest score is 99%.
 An overview of web app:
-![Screenshot](web_app_overview.JPG width="150px")
+
+![Screenshot](web_app_overview.JPG)
 
 ## Licensing, Authors, Acknowledgements
 The dataset is available on [Figure Eight](https://www.figure-eight.com/data-for-everyone/) website. It is licensed under a Creative Commons Attribution 4.0 International License.
